@@ -19,75 +19,84 @@
 
     <div class="content">
         <!-- Small boxes (Stat box) -->
-        <div class="row">
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-info">
-                    <div class="inner">
-                        <h3>{{$ordersCount}}</h3>
-
-                        <p>{{trans('lang.dashboard_total_orders')}}</p>
+        <div class="row ">
+            <div class="col-md-4 col-xs-6 pb-3">
+                <div class="partion">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <img src="{{asset('images/icons/سوبر ماركت (29).png')}}">
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="text-center">طلب الخدمة</p>
+                            <a href="{!! route('orders.index') !!}" class="small-box-footer ">{{trans('lang.dashboard_more_info')}}
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </a>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-shopping-bag"></i>
-                    </div>
-                    <a href="{!! route('orders.index') !!}" class="small-box-footer">{{trans('lang.dashboard_more_info')}}
-                        <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-danger">
-                    <div class="inner">
-                        @if(setting('currency_right', false) != false)
-                            <h3>{{$earning}}{{setting('default_currency')}}</h3>
-                        @else
-                            <h3>{{setting('default_currency')}}{{$earning}}</h3>
-                        @endif
-
-                        <p>{{trans('lang.dashboard_total_earnings')}} <span style="font-size: 11px">({{trans('lang.dashboard_after taxes')}})</span></p>
+            <div class=" col-md-4 col-xs-6 pb-3">
+                <div class=" partion">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <img src="{{asset('images/icons/سوبر ماركت (24).png')}}">
+                        </div>
+                        <div class="col-sm-7">
+                            <p class="text-center"> إرسال عنصر</p>
+                            <a href="{!! route('payments.index') !!}" class="small-box-footer">{{trans('lang.dashboard_more_info')}}
+                                <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-money"></i>
-                    </div>
-                    <a href="{!! route('payments.index') !!}" class="small-box-footer">{{trans('lang.dashboard_more_info')}}
-                        <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-success">
-                    <div class="inner">
-                        <h3>{{$marketsCount}}</h3>
-                        <p>{{trans('lang.market_plural')}}</p>
+            <div class=" col-md-4 col-xs-6 pb-3">
+                <div class=" partion">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <img src="{{asset('images/icons/سوبر ماركت (30).png')}}">
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="text-center"> أقرب صيدلية</p>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-cutlery"></i>
-                    </div>
-                    <a href="{!! route('markets.index') !!}" class="small-box-footer">{{trans('lang.dashboard_more_info')}}
-                        <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <!-- ./col -->
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-warning">
-                    <div class="inner">
-                        <h3>{{$membersCount}}</h3>
-
-                        <p>{{trans('lang.dashboard_total_clients')}}</p>
+            <div class=" col-md-4 col-xs-6 pb-3 ">
+                <div class=" partion">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <img src="{{asset('images/icons/سوبر ماركت (28).png')}}">
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="text-center"> أقرب سوبر ماركت</p>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="fa fa-group"></i>
-                    </div>
-                    <a href="{!! route('users.index') !!}" class="small-box-footer">{{trans('lang.dashboard_more_info')}}
-                        <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <!-- ./col -->
-
+            <div class="col-md-4 col-xs-6 pb-3 ">
+                <div class="partion">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <img src="{{asset('images/icons/كافيه.png')}}">
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="text-center">أقرب كافيهات</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-xs-6 pb-3">
+                <div class="partion">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <img src="{{asset('images/icons/مطعم.png')}}">
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="text-center"> أقرب مطاعم</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- /.row -->
 
@@ -229,7 +238,7 @@
                                         return "{{setting('default_currency')}} "+value;
                                     @else
                                         return value+" {{setting('default_currency')}}";
-                                        @endif
+                                    @endif
 
                                 }
                             }, ticksStyle)
