@@ -1,0 +1,65 @@
+{
+  "A fresh verification link has been sent to your email address."
+  : "تم ارسال رابط تأكيد حساب حديث الي البريد اﻻلكتروني",
+
+  "All rights reserved.": "جميع الحقوق محفوظه",
+  "Before proceeding, please check your email for a verification link."
+  : "قبل المتابعه , الرجاء التحقق من البريد الالكتروني لتاكيد الحساب عن طريق رابط التاكيد",
+  "click here to request another": "اضغط ﻻرسال طلب اخر",
+  "Confirm Password": "تاكيد كلمه المرور",
+  "E-Mail Address": "البريد اﻻلكتروني",
+  "Error": "خطء",
+  "Forbidden": "ممنوع",
+  "Forgot Your Password?": "نسيت كلمة المرور ؟",
+  "Go Home": "اذهب للرئيسيه",
+  "Hello!": "مرحبا !",
+  "hi": "مرحبا",
+  "If you did not create an account, no further action is required."
+  : "إذا لم تقم بإنشاء حساب ، فلا داعي لاتخاذ أي إجراء آخر.",
+  "If you did not receive the email": "اذا لم تتلقي رساله علي البريد اﻻلكتروني",
+  "If you did not request a password reset, no further action is required."
+  : "اذا لم تقم بطلب اعاده تعيين كلمة المرور , فلا داعي لاتحاذ أي اجراء اخر",
+  "If you’re having trouble clicking the \":actionText\" button, copy and paste the URL below\ninto your web browser: [:actionURL](:actionURL)"
+  : "If you’re having trouble clicking the \":actionText\" button, copy and paste the URL below\ninto your web browser: [:actionURL](:actionURL)",
+
+  "Login": "تسجيل دخول",
+  "Logout": "تسجيل خروج",
+  "Name": "اﻻسم",
+  "Oh no": "اوه ﻻ",
+  "Page Expired": "الصفحة منتهية الصلاحية",
+  "Page Not Found": "الصفحة غير موجودة",
+  "Password": "كلمة المرور",
+  "Please click the button below to verify your email address."
+  : "الرجاء النقر فوق الزر أدناه للتحقق من عنوان بريدك الإلكتروني.",
+  "Regards": "تحية",
+  "Register": "تسجيل",
+  "Remember Me": "تذكرني",
+  "Reset Password": "اعاده تعيين كلمه المرور",
+  "Reset Password Notification": "اشعار اعاده تعيين كلمه المرور",
+  "Send Password Reset Link": "إرسال رابط إعادة تعيين كلمة السر",
+  "Service Unavailable": "الخدمة غير متوفرة حاليا",
+  "Sorry, the page you are looking for could not be found.":
+  "عذرا ، الصفحة التي تبحث عنها لا يمكن العثور عليها.",
+  "Sorry, you are forbidden from accessing this page.": "عذرا ، أنت ممنوع من الوصول إلى هذه الصفحة.",
+  "Sorry, you are making too many requests to our servers.":
+  "عذرًا ، أنت تقدم طلبات كثيرة جدًا لخوادمنا.",
+  "Sorry, you are not authorized to access this page.":
+  "عذرا ، أنت غير مخول للوصول إلى هذه الصفحة.",
+  "Sorry, your session has expired. Please refresh and try again."
+  : "اسف، لقد انتهت صلاحية جسلتك. يرجى تحديث وحاول مرة أخرى.",
+  "Sorry, we are doing some maintenance. Please check back soon.":
+  "عذرا ، نحن نقوم ببعض الصيانة. الرجاء التحقق مرة اخرى قريبا.",
+
+  "This password reset link will expire in :count minutes.":
+  "This password reset link will expire in :count minutes.",
+
+  "Toggle navigation": "تبديل التنقل",
+  "Too Many Requests": "طلبات كثيرة جدا",
+  "Unauthorized": "غير مصرح",
+  "Verify Email Address": "التحقق من عنوان البريد الإلكتروني",
+  "Verify Your Email Address": "تحقق من عنوان بريدك الإلكتروني",
+  "You are receiving this email because we received a password reset request for your account.":
+  "أنت تتلقى هذا البريد الإلكتروني لأننا تلقينا طلب إعادة تعيين كلمة المرور لحسابك.",
+  "Whoops!": "عذرًا!",
+  "Whoops, something went wrong on our servers.": "عفوًا ، حدث خطأ ما على خوادمنا."
+}

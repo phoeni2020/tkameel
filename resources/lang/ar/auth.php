@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'agree' => 'أوفق علي الشروط و اﻻحكام',
+    'already_member' => 'انا عضو فعلا ',
+    'email' => 'البريد اﻻلكتروني',
+    'failed' => 'هذه المعلومات لا تطابق مع سجلاتنا',
+    'forgot_password' => 'نسيت كلمة المرور',
+    'login' => 'تسجيل الدخول',
+    'login_facebook' => 'تسجيل الدخول بالفيس بوك',
+    'login_title' => 'تسجيل الدخول لبدء الجلسة الخاصة بك',
+    'login_twitter' => 'تسجيل الدخول بالتويتر',
+    'logout' => 'تسجيل الخروج',
+    'name' => 'اﻻسم بالكامل',
+    'password' => 'كلمة المرور',
+    'password_confirmation' => 'تأكيد الباسوورد',
+    'register' => 'تسجيل الدخول',
+    'register_new_member' => 'تسجيل عضويه جديده',
+    'remember_me' => 'تذكرني',
+    'remember_password' => 'تذكرت كلمة المرور الرجوع لتسجيل ا لدخول',
+    'reset_password' => 'اعاده التعيين',
+    'reset_password_title' => 'ادخال كلمة المرور',
+    'reset_title' => 'البريد اﻻلكتروني لادخال كلمة المرور',
+    'send_password' => 'ارسال رابط اعاده التعيين',
+    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+];
