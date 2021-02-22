@@ -47,15 +47,24 @@ class UserAPIController extends Controller
     {
         try {
             $this->validate($request, [
-                'email' => 'required|email',
-                'password' => 'required',
+                'data.phone' => 'required',
+                'data.password' => 'required',
             ]);
-            if (auth()->attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
+            if (auth()->attempt(['phone' => $request->input('data.phone'), 'password' => $request->input('data.password')])) {
                 // Authentication passed...
                 $user = auth()->user();
                 $user->device_token = $request->input('device_token');
                 $user->save();
-                return $this->sendResponse($user, 'User retrieved successfully');
+                $data = $user->toArray();
+                $info =[
+                    'id'=>$data['id'],
+                    'name'=>$data['name'],
+                    'email'=>$data['email'],
+                    'phone'=>$data['phone'],
+                    'api_token'=>$data['api_token'],
+                    'image'=>$data['media'][0]['url']
+                ];
+                return $this->sendResponse($info, 'User retrieved successfully');
             }
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 401);
@@ -75,10 +84,9 @@ class UserAPIController extends Controller
         try {
             $this->validate($request, [
                 'data.name' => 'required',
-                'data.email' => 'required|email',
                 'data.country_code'=>'required',
                 'data.key'=>'required',
-                'data.phone' => 'required',
+                'data.phone' => 'required|unique:users,phone',
                 'data.password' => 'required',
             ]);
             //API key
@@ -153,9 +161,9 @@ class UserAPIController extends Controller
                 return $this->sendError('Sorry The Number You Have Entered Is Not A Valid Or Real Number In Your Region',404);
             }
 
-            $user = new User;
+            $user = new User();
             $user->name = $request->input('data.name');
-            $user->phone = $request->input('data.phone');
+            $user->phone = $request->input('data.key').$request->input('data.phone');
             $user->email = $request->input('device_token').'@tkameel.com';
             $user->device_token = $request->input('device_token');
             $user->password = Hash::make($request->input('data.password'));
@@ -166,18 +174,26 @@ class UserAPIController extends Controller
 
             event(new UserRoleChangedEvent($user));
 
-            if (asset('images/avatar_default_temp.png')) {
-
-                $user->addMedia(asset('images/avatar_default_temp.png'))
+            if(copy(public_path('images/avatar_default.png'),public_path('images/avatar_default_temp.png'))) {
+                $user->addMedia(public_path('images/avatar_default_temp.png'))
                     ->withCustomProperties(['uuid' => bcrypt(str_random())])
                     ->toMediaCollection('avatar');
             }
+            $data = $user->toArray();
+            $info =[
+                'id'=>$data['id'],
+                'name'=>$data['name'],
+                'email'=>$data['email'],
+                'phone'=>$data['phone'],
+                'api_token'=>$data['api_token'],
+                'image'=>$data['media'][0]['url']
+            ];
         }
         catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 401);
         }
 
-        return $this->sendResponse($user[''], 'User retrieved successfully');
+        return $this->sendResponse($info, 'User retrieved successfully');
     }
 
     function logout(Request $request)
@@ -197,7 +213,7 @@ class UserAPIController extends Controller
 
     function user(Request $request)
     {
-        $user = $this->userRepository->findByField('api_token', $request->input('api_token'))->first();
+        $user = $this->userRepository->find($request->input('id'))->first();
 
         if (!$user) {
             return $this->sendError('User not found', 401);

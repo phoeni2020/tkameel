@@ -20,9 +20,9 @@ Route::prefix('user')->group(function (){
     Route::post('login', 'API\UserAPIController@login');
     Route::post('register', 'API\UserAPIController@register');
     Route::post('send_reset_link_email', 'API\UserAPIController@sendResetLinkEmail');
-    Route::get('user', 'API\UserAPIController@user');
     Route::get('logout', 'API\UserAPIController@logout');
     Route::get('settings', 'API\UserAPIController@settings');
+
 });
 
 Route::prefix('driver')->group(function () {
@@ -66,6 +66,10 @@ Route::resource('option_groups', 'API\OptionGroupAPIController');
 Route::resource('options', 'API\OptionAPIController');
 
 Route::middleware('auth:api')->group(function () {
+    Route::post('test/auth',function (){
+        return 'hii';
+    });
+    Route::post('user', 'API\UserAPIController@user');
     Route::group(['middleware' => ['role:driver']], function () {
         Route::prefix('driver')->group(function () {
             Route::resource('orders', 'API\OrderAPIController');
