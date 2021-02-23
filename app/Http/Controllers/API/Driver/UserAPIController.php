@@ -16,6 +16,7 @@ use App\Repositories\CustomFieldRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\UploadRepository;
 use App\Repositories\UserRepository;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -45,20 +46,27 @@ class UserAPIController extends Controller
     {
         try {
             $this->validate($request, [
-                'email' => 'required|email',
-                'password' => 'required',
+                'data.phone' => 'required',
+                'data.password' => 'required',
             ]);
-            if (auth()->attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
+            if (auth()->attempt(['phone' => $request->input('data.phone'), 'password' => $request->input('data.password')])) {
                 // Authentication passed...
                 $user = auth()->user();
-                if (!$user->hasRole('driver')) {
-                    $this->sendError('User not driver', 401);
-                }
-                $user->device_token = $request->input('device_token', '');
+                $user->device_token = $request->input('device_token');
                 $user->save();
-                return $this->sendResponse($user, 'User retrieved successfully');
+                $data = $user->toArray();
+                $info =[
+                    'id'=>$data['id'],
+                    'name'=>$data['name'],
+                    'email'=>$data['email'],
+                    'phone'=>$data['phone'],
+                    'api_token'=>$data['api_token'],
+                    'image'=>$data['media'][0]['url']
+                ];
+                return $this->sendResponse($info, 'User retrieved successfully');
             }
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 401);
         }
 
@@ -70,31 +78,122 @@ class UserAPIController extends Controller
      * @param array $data
      * @return
      */
+
     function register(Request $request)
     {
         try {
             $this->validate($request, [
-                'name' => 'required',
-                'email' => 'required|unique:users|email',
-                'password' => 'required',
+                'data.name' => 'required',
+                'data.country_code'=>'required',
+                'data.key'=>'required',
+                'data.phone' => 'required|unique:users,phone',
+                'data.password' => 'required',
             ]);
-            $user = new User;
-            $user->name = $request->input('name');
-            $user->email = $request->input('email');
-            $user->device_token = $request->input('device_token', '');
-            $user->password = Hash::make($request->input('password'));
+            //API key
+            $access_key = $this->access_key;
+
+            $number = $request->input('data.phone');
+
+            $country = $request->input('data.country_code');
+
+            /**
+             * This is api to check phone number
+             * and make sure the phone number is a real number
+             *
+             * in case the phone number is a real phone num
+             * the response will be like
+            {
+            "valid": true,
+            "number": "14158586273",
+            "local_format": "4158586273",
+            "international_format": "+14158586273",
+            "country_prefix": "+1",
+            "country_code": "US",
+            "country_name": "United States of America",
+            "location": "Novato",
+            "carrier": "AT&T Mobility LLC",
+            "line_type": "mobile"
+            }
+             * else
+            {
+            "valid": false,
+            "number": "14158586273",
+            "local_format": "",
+            "international_format": "",
+            "country_prefix": "",
+            "country_code": "",
+            "country_name": "",
+            "location": "",
+            "carrier": "",
+            "line_type": ""
+            }
+
+             * if there is any config errors the response will be like
+             *
+            {
+            "success": false,
+            "error": {
+            "code": 210,
+            "type": "no_phone_number_provided",
+            "info": "Please specify a phone number. [Example: 14158586273]"
+            }
+            }
+             *
+             * Edit @ 2021.02.21 12:09
+             * By Khaled waleed
+             */
+
+            $url =
+                "http://apilayer.net/api/validate?access_key=${access_key}&number=${number}&country_code=${country}";
+
+            $http = new Client();
+
+            $response = $http->get("$url");
+
+            $body = $response->getBody()->getContents();
+
+            $response_arr = json_decode($body,true);
+
+            if(isset($response_arr['success']) && $response_arr['success'] == false){
+                return $this->sendError($response_arr['error']['info'],$response_arr['error']['code']);
+            }
+            elseif (isset($response_arr['valid']) && $response_arr['valid'] == false ){
+                return $this->sendError('Sorry The Number You Have Entered Is Not A Valid Or Real Number In Your Region',404);
+            }
+
+            $user = new User();
+            $user->name = $request->input('data.name');
+            $user->phone = $request->input('data.key').$request->input('data.phone');
+            $user->email = $request->input('device_token').'@tkameel.com';
+            $user->device_token = $request->input('device_token');
+            $user->password = Hash::make($request->input('data.password'));
             $user->api_token = str_random(60);
             $user->save();
 
-            $user->assignRole('driver');
+            $user->assignRole('client');
 
             event(new UserRoleChangedEvent($user));
-        } catch (\Exception $e) {
+
+            if(copy(public_path('images/avatar_default.png'),public_path('images/avatar_default_temp.png'))) {
+                $user->addMedia(public_path('images/avatar_default_temp.png'))
+                    ->withCustomProperties(['uuid' => bcrypt(str_random())])
+                    ->toMediaCollection('avatar');
+            }
+            $data = $user->toArray();
+            $info =[
+                'id'=>$data['id'],
+                'name'=>$data['name'],
+                'email'=>$data['email'],
+                'phone'=>$data['phone'],
+                'api_token'=>$data['api_token'],
+                'image'=>$data['media'][0]['url']
+            ];
+        }
+        catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 401);
         }
 
-
-        return $this->sendResponse($user, 'User retrieved successfully');
+        return $this->sendResponse($info, 'User retrieved successfully');
     }
 
     function logout(Request $request)
@@ -114,7 +213,7 @@ class UserAPIController extends Controller
 
     function user(Request $request)
     {
-        $user = $this->userRepository->findByField('api_token', $request->input('api_token'))->first();
+        $user = $this->userRepository->find($request->input('id'))->first();
 
         if (!$user) {
             return $this->sendError('User not found', 401);

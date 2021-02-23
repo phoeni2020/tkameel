@@ -3,10 +3,10 @@
 namespace Yajra\DataTables\Services;
 
 use Illuminate\Http\JsonResponse;
-use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Collection;
-use Yajra\DataTables\Contracts\DataTableScope;
 use Yajra\DataTables\Contracts\DataTableButtons;
+use Yajra\DataTables\Contracts\DataTableScope;
+use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Transformers\DataArrayTransformer;
 
 abstract class DataTable implements DataTableButtons
@@ -323,7 +323,10 @@ abstract class DataTable implements DataTableButtons
      */
     protected function getAjaxResponseData()
     {
-        $this->request()->merge(['length' => -1]);
+        $this->request()->merge([
+            'start'  => 0,
+            'length' => -1,
+        ]);
 
         $response = app()->call([$this, 'ajax']);
         $data     = $response->getData(true);

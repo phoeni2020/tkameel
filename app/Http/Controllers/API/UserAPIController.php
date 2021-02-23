@@ -19,6 +19,7 @@ use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Validator;
 use Prettus\Validator\Exceptions\ValidatorException;
 use GuzzleHttp\Client;
 class UserAPIController extends Controller
@@ -66,8 +67,9 @@ class UserAPIController extends Controller
                 ];
                 return $this->sendResponse($info, 'User retrieved successfully');
             }
-        } catch (\Exception $e) {
-            return $this->sendError($e->getMessage(), 401);
+        }
+        catch (\Exception $e) {
+        return $this->sendError($e->getMessage(), 401);
         }
 
     }
@@ -289,11 +291,27 @@ class UserAPIController extends Controller
                 'code' => 404,
             ], 'User not found');
         }
-        $input = $request->except(['password', 'api_token']);
-        try {
-            if ($request->has('device_token')) {
-                $user = $this->userRepository->update($request->only('device_token'), $id);
-            } else {
+        $validtion = Validator::make($request->all(), [
+            'data.name' => 'required',
+            'data.country_code'=>'required',
+            'data.key'=>'required',
+            'data.phone' => 'required|unique:users,phone',
+            'data.password' => 'required',
+        ]);
+        if($validtion->fails()){
+                return $this->sendError($validtion->errors() , 401);
+        }
+        $input = $request->except('api_token');
+        try
+        {
+            if ($request->has('device_token'))
+            {
+
+                $user->password = Hash::make($request->input('data.password'));
+                $user = $this->userRepository->update($request->all(), $id);
+            }
+            else
+            {
                 $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->userRepository->model());
                 $user = $this->userRepository->update($input, $id);
 
@@ -302,7 +320,8 @@ class UserAPIController extends Controller
                         ->updateOrCreate(['custom_field_id' => $value['custom_field_id']], $value);
                 }
             }
-        } catch (ValidatorException $e) {
+        }
+        catch (ValidatorException $e) {
             return $this->sendError($e->getMessage(), 401);
         }
 

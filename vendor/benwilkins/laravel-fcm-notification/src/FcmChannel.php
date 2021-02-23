@@ -4,7 +4,6 @@ namespace Benwilkins\FCM;
 
 use GuzzleHttp\Client;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class FcmChannel.
@@ -82,7 +81,6 @@ class FcmChannel
 
             array_push($response_array, \GuzzleHttp\json_decode($response->getBody(), true));
         }
-        Log::warning($message->formatData());
 
         return $response_array;
     }

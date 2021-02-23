@@ -82,9 +82,9 @@ final class GlideConversion
             $glideServer->setGroupCacheInFolders(false);
 
             $manipulatedImage = $this->temporaryDirectory.DIRECTORY_SEPARATOR.$glideServer->makeImage(
-                    pathinfo($inputFile, PATHINFO_BASENAME),
-                    $this->prepareManipulations($manipulationGroup)
-                );
+                pathinfo($inputFile, PATHINFO_BASENAME),
+                $this->prepareManipulations($manipulationGroup)
+            );
 
             if ($this->conversionResult) {
                 unlink($this->conversionResult);
@@ -144,7 +144,7 @@ final class GlideConversion
 
         unlink($this->conversionResult);
 
-        if ($this->directoryIsEmpty($conversionResultDirectory) && $conversionResultDirectory !== '/tmp') {
+        if ($this->directoryIsEmpty($conversionResultDirectory) && $conversionResultDirectory !== sys_get_temp_dir()) {
             rmdir($conversionResultDirectory);
         }
     }

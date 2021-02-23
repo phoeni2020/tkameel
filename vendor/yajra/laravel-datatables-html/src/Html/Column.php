@@ -5,6 +5,7 @@ namespace Yajra\DataTables\Html;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Fluent;
+use Yajra\DataTables\Html\Options\Plugins\SearchPanes;
 
 /**
  * @property string data
@@ -19,6 +20,8 @@ use Illuminate\Support\Fluent;
  */
 class Column extends Fluent
 {
+    use SearchPanes;
+
     /**
      * @param array $attributes
      */
@@ -102,6 +105,20 @@ class Column extends Fluent
         return $this;
     }
 
+     /**
+     * Set column responsive priority.
+     *
+     * @param int|string $value
+     * @return $this
+     * @see https://datatables.net/reference/option/columns.responsivePriority
+     */
+    public function responsivePriority($value)
+    {
+        $this->attributes['responsivePriority'] = $value;
+
+        return $this;
+    }
+
     /**
      * Set column title.
      *
@@ -128,6 +145,23 @@ class Column extends Fluent
         $attr = [
             'data' => $data,
             'name' => $name ?: $data,
+        ];
+
+        return new static($attr);
+    }
+
+    /**
+     * Make a new formatted column instance.
+     *
+     * @param string $name
+     * @return Column
+     */
+    public static function formatted($name)
+    {
+        $attr = [
+            'data'  => $name . '_formatted',
+            'name'  => $name,
+            'title' => self::titleFormat($name),
         ];
 
         return new static($attr);

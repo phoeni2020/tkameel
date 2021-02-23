@@ -8,7 +8,7 @@
 				input.focus();
 				var len = input.value.length;
 				if (document.selection) {
-					var sel = input.createTextRange();
+					var sel = input.createToptionnge();
 					sel.moveStart('character', len);
 					sel.collapse();
 					sel.select();

@@ -49,9 +49,9 @@ class AppGeneratorCommand extends BaseCommand
             if (isset($table['api']) && $table['api'] === true) {
                 $this->call('infyom.api:controller', $arguments);
             }
-//            if ($key != $last_key) {
-//                $arguments['--migrate'] = 'true';
-//            }
+            if ($key != $last_key) {
+                $arguments['--migrate'] = 'true';
+            }
             if (isset($table['skip']) && $table['skip'] === true) {
                 $arguments['--skip'] = '*';
             }

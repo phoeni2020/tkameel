@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Str;
 
 if (!function_exists('infy_tab')) {
     /**
@@ -230,7 +231,7 @@ if (!function_exists('model_name_from_table_name')) {
      */
     function model_name_from_table_name($tableName)
     {
-        return ucfirst(camel_case(str_singular($tableName)));
+        return ucfirst(Str::camel(str_singular($tableName)));
     }
 }
 if (!function_exists('get_relation')) {
@@ -246,7 +247,7 @@ if (!function_exists('get_relation')) {
         }elseif($for === 'view'){
             $relation = '->with("${MODEL}",$${MODEL})';
         }
-        $model = preg_split('/\./', $field->title)[0];
+        $model = Str::camel(preg_split('/\./', $field->title)[0]);
         $relation = str_replace('${MODEL}', $model, $relation);
         return $relation;
     }
@@ -282,8 +283,9 @@ function fill_add_repositories_template($fieldNames, $templateData, $templateTyp
         $addRepositoryTemplate = get_template('scaffold.controller.repository_attr', $templateType);
 
         $addRepositoryTemplate = fill_template([
-            '$RELATION_MODEL$' => studly_case($modelName),
-            '$RELATION_MODEL_SNAKE$' => snake_case($modelName)
+            '$RELATION_MODEL$' => Str::studly($modelName),
+            '$RELATION_MODEL_CAMEL$' => Str::camel($modelName),
+            '$RELATION_MODEL_SNAKE$' => Str::snake($modelName)
         ], $addRepositoryTemplate);
 
         $addRepositoryTemplate = preg_split('/#{3}/', $addRepositoryTemplate);

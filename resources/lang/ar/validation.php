@@ -1,6 +1,12 @@
 <?php 
 
 return [
+    'type_required'=>'نوع المركبه حقل مطلوب',
+    'plateno_required'=>'لوحات تسجيل المركبه مطلوبه',
+    'capacity_required'=>'سعة المركبه حقل مطلوب',
+    'brand_required'=>'يجب ادخال ماركة المركبه ',
+    'id_required'=>'يجب ارسال المعرف الخاص بالمستخدم',
+    'id.exists'=>'المعرف الخاص بالمستخدم لا يوجد بقاعده البيانات',
     'accepted' => 'The :attribute must be accepted.',
     'active_url' => 'The :attribute is not a valid URL.',
     'after' => 'The :attribute must be a date after :date.',

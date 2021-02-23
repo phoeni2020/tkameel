@@ -14,4 +14,5 @@ return array(
     'Mockery' => array($vendorDir . '/mockery/mockery/library'),
     'MaddHatter\\LaravelFullcalendar' => array($vendorDir . '/maddhatter/laravel-fullcalendar/src'),
     'Laracasts\\Flash' => array($vendorDir . '/laracasts/flash/src'),
+    'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
 );
