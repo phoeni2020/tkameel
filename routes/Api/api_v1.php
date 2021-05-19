@@ -26,17 +26,26 @@ Route::middleware('APIkey')->group(function () {
         Route::get('settings', 'API\UserAPIController@settings');
         Route::put('edit/{id}', 'API\UserAPIController@update');
     });
-    Route::group(['middleware' => ['role:driver']], function () {
-        Route::prefix('driver')->group(function () {
-            Route::get('/', 'API\Driver\UserAPIController@user');
-            Route::get('settings', 'API\Driver\UserAPIController@settings');
-            Route::resource('orders', 'API\OrderAPIController');
-            Route::resource('notifications', 'API\NotificationAPIController');
-            Route::post('users/{id}', 'API\UserAPIController@update');
-            Route::resource('faq_categories', 'API\FaqCategoryAPIController');
-            Route::resource('faqs', 'API\FaqAPIController');
+
+    Route::group(['prefix'=>'driver'], function () {
+
+        Route::post('/', 'API\Driver\UserAPIController@user');
+        Route::post('users/{id}', 'API\UserAPIController@update');
+
+        //start car
+        Route::prefix('car')->group(function (){
+            Route::post('/create','API\VeichleAPIController@create');
         });
+        //end car
+
+        Route::get('settings', 'API\Driver\UserAPIController@settings');
+        Route::resource('orders', 'API\OrderAPIController');
+        Route::resource('notifications', 'API\NotificationAPIController');
+
+        Route::resource('faq_categories', 'API\FaqCategoryAPIController');
+        Route::resource('faqs', 'API\FaqAPIController');
     });
+
     Route::group(['middleware' => ['role:manager']], function () {
         Route::prefix('manager')->group(function () {
             Route::post('users/{id}', 'API\UserAPIController@update');
@@ -46,9 +55,7 @@ Route::middleware('APIkey')->group(function () {
             Route::resource('notifications', 'API\NotificationAPIController');
         });
     });
-
     Route::resource('order_statuses', 'API\OrderStatusAPIController');
-
     Route::get('payments/byMonth', 'API\PaymentAPIController@byMonth')->name('payments.byMonth');
     Route::resource('payments', 'API\PaymentAPIController');
 

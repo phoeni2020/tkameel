@@ -5,8 +5,46 @@ scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
 
 type Query {
-    users: [User!]! @paginate(defaultCount: 10)
-    user(id: ID @eq): User @find
+
+    ##users query start
+        users: [User!]! @paginate(defaultCount: 10)
+
+        user(id: ID @eq): User @find
+
+        apitoken(api_token: String!):User
+    ##users query end
+
+    ##driver query start
+        driver(id: ID @eq): Driver @find
+
+        drivers:[Driver] @all
+
+        driverbyavaliable(available: Boolean!):Driver
+    ##driver query end
+
+    ##car query start
+        veichle(id: ID@eq): Veichle @find
+        veichles:[Veichle]@all
+
+    ##car query end
+
+
+}
+
+type Mutation{
+    createuser
+    (
+      name: String! @rules(apply: ["required","min:4"]),
+      phone: String! @rules(apply: ["required"]),
+      password: String! @hash @rules(apply: ["required"]),
+    ): User @create(model: "App\\Models\\User")
+
+    createdriver(
+        user_id: Int! @rules(apply: ["required"]),
+        delivery_fee: Float! @rules(apply: ["required"]),
+        total_orders: Int! @rules(apply: ["required"]),
+        earning: Int! @rules(apply: ["required"]),
+    ):Driver @create(model: "App\\Models\\Driver")
 }
 
 type User {
@@ -14,6 +52,28 @@ type User {
     name: String!
     email: String!
     phone:String!
+    api_token:String!
+    device_token:String
     created_at: DateTime!
     updated_at: DateTime!
+}
+
+type Driver{
+    id:ID!
+    delivery_fee: Float!
+    total_orders: Int!
+    earning: Float!
+    available: Boolean!
+    user_id: User!@belongsTo
+    veichle: Veichle!@hasOne
+}
+
+type Veichle{
+    id:ID!
+    type:String!
+    plateno:String!
+    capacity:Int!
+    brand:String!
+    driver:Driver!@belongsTo
+
 }

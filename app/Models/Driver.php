@@ -87,9 +87,13 @@ class Driver extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      **/
-    public function user()
+    public function user_id()
     {
         return $this->belongsTo(\App\Models\User::class, 'user_id', 'id');
+    }
+
+    public function veichle(){
+        return $this->hasOne(Veichle::class);
     }
     
 }

@@ -28,6 +28,7 @@ class UserAPIController extends Controller
     private $uploadRepository;
     private $roleRepository;
     private $customFieldRepository;
+    private $access_key = 'f11a1d1dba678b3e46448ab43ea97402';
 
     /**
      * Create a new controller instance.
@@ -170,7 +171,7 @@ class UserAPIController extends Controller
             $user->api_token = str_random(60);
             $user->save();
 
-            $user->assignRole('client');
+            $user->assignRole('driver');
 
             event(new UserRoleChangedEvent($user));
 

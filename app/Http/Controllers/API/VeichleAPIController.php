@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Driver;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Veichle;
@@ -25,15 +26,19 @@ class VeichleAPIController extends Controller
             {
                 return $this->sendError($validtior->errors(),401);
             }
+            $drivers = Driver::select('id')->where('user_id','=',$request->input('data.id'))->get();
+            $id = $drivers->toArray();
             $veichle = new Veichle();
             $veichle->type = $request->input('data.type');
             $veichle->plateno = $request->input('data.plateno');
             $veichle->capacity = $request->input('data.capacity');
             $veichle->brand = $request->input('data.brand');
-            $veichle->user_id = $request->input('data.id');
+            $veichle->driver = $id[0]['id'];
             //$veichle->img_license = $request->input('data.img_license');
             //$veichle->img_vehicle_license = $request->input('data.img_vehicle_license');
             $veichle->save();
+
+            return $this->sendResponse($veichle ,'Veichle retrieved successfully');
         }
         catch (\ErrorException $e)
         {
@@ -44,11 +49,11 @@ class VeichleAPIController extends Controller
 
     private function rules(){
         return[
-            'type'=>'required',
-            'plateno'=>'required',
-            'capacity'=>'required|numeric',
-            'brand'=>'required',
-            'id'=>'required|exists:users,id',
+            'data.type'=>'required',
+            'data.plateno'=>'required',
+            'data.capacity'=>'required|numeric',
+            'data.brand'=>'required',
+            'data.id'=>'required|exists:users,id',
         ];
     }
     private function massages(){
@@ -58,7 +63,7 @@ class VeichleAPIController extends Controller
             'capacity.required'=>trans('validation.capacity_required'),
             'capacity.numeric'=>trans('validation.capacity_numeric'),
             'brand.required'=>trans('validation.capacity_numeric'),
-            'id_required'=>trans('validation.id_required'),
+            'id.required'=>trans('validation.id_required'),
             'id.exists'=>trans('validation.id_exists'),
         ];
     }
